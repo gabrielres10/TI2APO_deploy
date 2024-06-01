@@ -1,0 +1,22 @@
+databases:
+  - name: chatbot
+    plan: free
+    databaseName: chatbot
+    user: avnadmin
+
+services:
+  - type: web
+    plan: free
+    name: chatbot
+    runtime: python
+    buildCommand: "./build.sh"
+    startCommand: "uvicorn mysite.asgi:application --host 0.0.0.0 --port 8000"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: chatbot
+          property: postgres://avnadmin:AVNS_o-YVhLCZh40Cfq-t_93@chatbot-service-psychology-chatbot.e.aivencloud.com:16619/defaultdb?sslmode=require
+      - key: SECRET_KEY
+        generateValue: true
+      - key: WEB_CONCURRENCY
+        value: 4
